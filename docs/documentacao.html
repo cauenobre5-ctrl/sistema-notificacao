@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Sistema de Notificação — Documentação do Projeto</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+<style>
+  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+  @page paisagem { size: A4 landscape; margin: 10mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; line-height: 1.5; color: #1d2433; margin: 0; }
+  h1 { font-size: 20pt; margin: 0 0 6pt; color: #12305a; }
+  h2 { font-size: 15pt; color: #12305a; border-bottom: 2px solid #12305a; padding-bottom: 3pt; margin: 18pt 0 8pt; break-after: avoid; }
+  h3 { font-size: 12pt; color: #1f4f8f; margin: 14pt 0 5pt; break-after: avoid; }
+  h4 { font-size: 10.5pt; margin: 10pt 0 4pt; break-after: avoid; }
+  p, li { text-align: justify; }
+  .quebra { break-before: page; }
+  .capa { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; text-align: center; }
+  .capa .topo { font-size: 12pt; letter-spacing: 1px; text-transform: uppercase; color: #555; }
+  .capa .titulo { font-size: 28pt; font-weight: 700; color: #12305a; margin-top: 60mm; }
+  .capa .sub { font-size: 14pt; color: #1f4f8f; margin-top: 6pt; }
+  .capa .info { font-size: 11.5pt; line-height: 1.9; }
+  .capa .rodape { font-size: 11pt; color: #555; }
+  table { border-collapse: collapse; width: 100%; margin: 6pt 0 10pt; font-size: 9.5pt; break-inside: avoid; }
+  th, td { border: 1px solid #b9c3d3; padding: 4pt 6pt; vertical-align: top; text-align: left; }
+  th { background: #e8eef7; }
+  .diagrama { text-align: center; margin: 8pt 0; break-inside: avoid; }
+  .diagrama .mermaid svg { max-width: 100% !important; height: auto; }
+  .legenda { font-size: 9pt; color: #555; text-align: center; font-style: italic; margin-top: 2pt; }
+  .paisagem { page: paisagem; break-before: page; }
+  .paisagem h2 { margin-top: 0; }
+  .paisagem .mermaid svg { max-height: 165mm; }
+  pre { margin: 6pt 0 4pt; break-inside: avoid; }
+  pre code.hljs { font-family: Consolas, "Courier New", monospace; font-size: 8.4pt; line-height: 1.35; border: 1px solid #d5dbe5; border-radius: 4px; padding: 7pt 9pt; white-space: pre-wrap; }
+  .arquivo { font-family: Consolas, monospace; font-size: 8.5pt; color: #fff; background: #12305a; display: block; width: fit-content; padding: 1pt 6pt; border-radius: 3px 3px 0 0; margin-top: 8pt; break-after: avoid; }
+  .arquivo + pre { margin-top: 0; }
+  .explica { background: #f4f7fb; border-left: 4px solid #1f4f8f; padding: 6pt 9pt; margin: 4pt 0 10pt; font-size: 10pt; break-inside: avoid; }
+  .problema { background: #fdf3f2; border-left: 4px solid #c0392b; padding: 6pt 9pt; margin: 6pt 0; break-inside: avoid; }
+  .solucao { background: #f0f8f1; border-left: 4px solid #2e8b57; padding: 6pt 9pt; margin: 6pt 0; break-inside: avoid; }
+  .saida { font-family: Consolas, monospace; font-size: 8.2pt; background: #111; color: #e6e6e6; padding: 8pt 10pt; border-radius: 4px; white-space: pre; line-height: 1.35; break-inside: avoid; }
+  .repo { font-size: 12pt; padding: 8pt 10pt; border: 2px dashed #12305a; text-align: center; margin: 8pt 0; }
+  code { font-family: Consolas, monospace; font-size: 9.3pt; background: #eef1f6; padding: 0 3px; border-radius: 3px; }
+  .check td:first-child { width: 22pt; text-align: center; font-weight: 700; color: #2e8b57; }
+  ul { margin: 4pt 0 8pt; padding-left: 18pt; }
+</style>
+</head>
+<body>
+
+<!-- ============================ CAPA ============================ -->
+<section class="capa">
+  <div class="topo">Arquitetura de Software · Modelagem UML e Padrões de Projeto</div>
+  <div>
+    <div class="titulo">Sistema de Notificação</div>
+    <div class="sub">Envio por E-mail, SMS e Push</div>
+    <div class="sub" style="font-size:11.5pt;color:#555;margin-top:14pt">Documentação do Projeto — Etapas 1, 2 e 3</div>
+  </div>
+  <div class="info">
+    <b>Aluno(a):</b> NOME DO ALUNO<br>
+    <b>Curso / Turma:</b> CURSO — TURMA<br>
+    <b>Professor(a):</b> NOME DO PROFESSOR<br>
+    <b>Repositório:</b> <a href="https://github.com/SEU-USUARIO/sistema-notificacao">https://github.com/SEU-USUARIO/sistema-notificacao</a>
+  </div>
+  <div class="rodape">2026</div>
+</section>
+
+<!-- ============================ SUMÁRIO ============================ -->
+<section class="quebra">
+  <h2>Sumário</h2>
+  <ol>
+    <li><b>Etapa 1 — Definição e Modelagem UML</b>
+      <ol>
+        <li>Definição do problema</li>
+        <li>Requisitos funcionais</li>
+        <li>Diagrama de Classes</li>
+        <li>Diagrama de Sequência</li>
+      </ol></li>
+    <li><b>Etapa 2 — Aplicação de Padrões de Projeto</b>
+      <ol>
+        <li>Seleção dos padrões</li>
+        <li>Strategy (comportamental) — problema e solução</li>
+        <li>Adapter (estrutural) — problema e solução</li>
+        <li>Como os dois padrões trabalham juntos</li>
+      </ol></li>
+    <li><b>Etapa 3 — Prova de Conceito</b>
+      <ol>
+        <li>Visão geral da implementação</li>
+        <li>Snippets explicados</li>
+        <li>Execução e saída do console</li>
+      </ol></li>
+    <li><b>Repositório do código-fonte</b></li>
+    <li><b>Checklist de entrega</b></li>
+  </ol>
+
+  <!-- ============================ ETAPA 1 ============================ -->
+  <h2>1. Etapa 1 — Definição e Modelagem UML</h2>
+
+  <h3>1.1 Definição do problema</h3>
+  <p>Aplicações modernas (lojas virtuais, bancos, aplicativos de entrega) precisam avisar seus usuários sobre
+  eventos importantes: confirmação de pedido, código de acesso, promoções, alertas de segurança. Cada usuário
+  pode preferir ser avisado por um ou mais canais — <b>e-mail</b>, <b>SMS</b> ou <b>notificação push</b> no
+  celular — e cada canal tem regras próprias: o e-mail aceita assunto e corpo HTML longo; o SMS é texto puro
+  limitado a 160 caracteres e exige telefone válido; o push exige o <i>token</i> do dispositivo e um título curto.</p>
+  <p>Além disso, a entrega efetiva é feita por <b>provedores externos</b> (por exemplo SendGrid para e-mail,
+  Twilio para SMS e Firebase Cloud Messaging para push), cada um com uma API diferente, que a nossa equipe não
+  controla e que pode ser trocada por motivo de custo ou disponibilidade.</p>
+  <p>O <b>módulo de Notificação</b> projetado neste trabalho é um componente reutilizável que recebe um pedido de
+  notificação (destinatário + título + mensagem + canal), escolhe a forma correta de enviá-lo, conversa com o
+  provedor adequado, faz novas tentativas em caso de falha temporária e registra o histórico de envios.
+  O escopo foi mantido pequeno (sem interface gráfica, sem banco de dados e com provedores simulados), mas com
+  complexidade de design suficiente para justificar o uso de padrões de projeto.</p>
+
+  <h3>1.2 Requisitos funcionais</h3>
+  <table>
+    <tr><th style="width:52pt">Código</th><th>Requisito</th></tr>
+    <tr><td>RF01</td><td>O sistema deve enviar uma notificação por um canal específico: <b>E-mail</b>, <b>SMS</b> ou <b>Push</b>.</td></tr>
+    <tr><td>RF02</td><td>O sistema deve enviar a mesma mensagem por <b>todos os canais preferidos</b> de um destinatário.</td></tr>
+    <tr><td>RF03</td><td>O sistema deve <b>validar o contato</b> do destinatário antes do envio (e-mail bem formado, telefone no formato internacional, token de dispositivo presente).</td></tr>
+    <tr><td>RF04</td><td>O sistema deve <b>formatar a mensagem conforme o canal</b> (HTML para e-mail, truncar SMS em 160 caracteres, limitar título do push a 50 caracteres).</td></tr>
+    <tr><td>RF05</td><td>O sistema deve <b>tentar reenviar</b> automaticamente até N vezes quando houver falha temporária do provedor, e não deve tentar novamente quando a falha for de validação.</td></tr>
+    <tr><td>RF06</td><td>O sistema deve <b>registrar o histórico</b> de notificações com status (PENDENTE, ENVIADA, FALHOU) e número de tentativas, permitindo filtrar por status.</td></tr>
+    <tr><td>RF07</td><td>O sistema deve permitir <b>adicionar um novo canal ou trocar o provedor</b> de um canal sem alterar o serviço de notificação.</td></tr>
+  </table>
+  <p><b>Requisitos não funcionais relevantes ao design:</b> extensibilidade (novos canais/provedores com o mínimo de
+  alteração — Princípio Aberto/Fechado), baixo acoplamento com bibliotecas de terceiros e testabilidade
+  (provedores substituíveis por versões simuladas).</p>
+</section>
+
+<!-- ============================ DIAGRAMA DE CLASSES ============================ -->
+<section class="paisagem">
+  <h2>1.3 Diagrama de Classes</h2>
+  <div class="diagrama">
+<pre class="mermaid">
+classDiagram
+  direction LR
+
+  class ServicoNotificacao {
+    -estrategias: Map~TipoCanal, EstrategiaEnvio~
+    -historico: HistoricoNotificacoes
+    -maxTentativas: int
+    +ServicoNotificacao(maxTentativas: int)
+    +registrarEstrategia(estrategia: EstrategiaEnvio) void
+    +enviar(notificacao: Notificacao) ResultadoEnvio
+    +enviarPorPreferencias(d: Destinatario, titulo: String, mensagem: String) List~ResultadoEnvio~
+    -enviarComRetentativa(e: EstrategiaEnvio, n: Notificacao) ResultadoEnvio
+    +getHistorico() HistoricoNotificacoes
+  }
+
+  class HistoricoNotificacoes {
+    -registros: List~Notificacao~
+    +registrar(n: Notificacao) void
+    +listarTodas() List~Notificacao~
+    +filtrarPorStatus(s: StatusNotificacao) List~Notificacao~
+  }
+
+  class Notificacao {
+    -id: String
+    -destinatario: Destinatario
+    -titulo: String
+    -mensagem: String
+    -canal: TipoCanal
+    -criadaEm: LocalDateTime
+    -status: StatusNotificacao
+    -tentativas: int
+    +incrementarTentativa() void
+    +marcarComoEnviada() void
+    +marcarComoFalha() void
+    +getStatus() StatusNotificacao
+  }
+
+  class Destinatario {
+    -id: String
+    -nome: String
+    -email: String
+    -telefone: String
+    -deviceToken: String
+    -preferencias: List~TipoCanal~
+    +adicionarPreferencia(canal: TipoCanal) void
+    +getPreferencias() List~TipoCanal~
+  }
+
+  class ResultadoEnvio {
+    -sucesso: boolean
+    -definitivo: boolean
+    -detalhe: String
+    -dataHora: LocalDateTime
+    +sucesso(detalhe: String)$ ResultadoEnvio
+    +falha(detalhe: String)$ ResultadoEnvio
+    +falhaDefinitiva(detalhe: String)$ ResultadoEnvio
+    +isSucesso() boolean
+    +isDefinitivo() boolean
+  }
+
+  class TipoCanal {
+    &lt;&lt;enumeration&gt;&gt;
+    EMAIL
+    SMS
+    PUSH
+  }
+
+  class StatusNotificacao {
+    &lt;&lt;enumeration&gt;&gt;
+    PENDENTE
+    ENVIADA
+    FALHOU
+  }
+
+  class EstrategiaEnvio {
+    &lt;&lt;abstract&gt;&gt;
+    +getCanal()* TipoCanal
+    #validarDestinatario(d: Destinatario)* boolean
+    #executarEnvio(n: Notificacao)* ResultadoEnvio
+    +enviar(n: Notificacao) ResultadoEnvio
+  }
+
+  class EnvioEmail {
+    -gateway: GatewayEmail
+    -remetente: String
+    #validarDestinatario(d: Destinatario) boolean
+    #executarEnvio(n: Notificacao) ResultadoEnvio
+  }
+  class EnvioSms {
+    +LIMITE_CARACTERES: int = 160$
+    -gateway: GatewaySms
+    #validarDestinatario(d: Destinatario) boolean
+    #executarEnvio(n: Notificacao) ResultadoEnvio
+  }
+  class EnvioPush {
+    +LIMITE_TITULO: int = 50$
+    -gateway: GatewayPush
+    #validarDestinatario(d: Destinatario) boolean
+    #executarEnvio(n: Notificacao) ResultadoEnvio
+  }
+
+  class GatewayEmail {
+    &lt;&lt;interface&gt;&gt;
+    +enviarEmail(remetente: String, para: String, assunto: String, html: String) boolean
+  }
+  class GatewaySms {
+    &lt;&lt;interface&gt;&gt;
+    +enviarSms(telefone: String, texto: String) boolean
+  }
+  class GatewayPush {
+    &lt;&lt;interface&gt;&gt;
+    +enviarPush(token: String, titulo: String, corpo: String) boolean
+  }
+
+  class SendGridAdapter {
+    -api: SendGridApi
+    +enviarEmail(...) boolean
+  }
+  class TwilioAdapter {
+    -client: TwilioClient
+    -numeroOrigem: String
+    +enviarSms(...) boolean
+  }
+  class FirebaseAdapter {
+    -firebase: FirebaseMessaging
+    +enviarPush(...) boolean
+  }
+
+  class SendGridApi {
+    &lt;&lt;externa&gt;&gt;
+    -apiKey: String
+    +send(payload: Map~String,String~) int
+  }
+  class TwilioClient {
+    &lt;&lt;externa&gt;&gt;
+    +createMessage(from: String, to: String, body: String) String
+  }
+  class FirebaseMessaging {
+    &lt;&lt;externa&gt;&gt;
+    +dispatch(message: Message) String
+  }
+
+  ServicoNotificacao "1" *-- "1" HistoricoNotificacoes : composição
+  ServicoNotificacao "1" o-- "0..*" EstrategiaEnvio : agregação
+  ServicoNotificacao ..> Notificacao : processa
+  HistoricoNotificacoes "1" o-- "0..*" Notificacao : registra
+  Notificacao "0..*" --> "1" Destinatario : associação
+  Notificacao --> TipoCanal
+  Notificacao --> StatusNotificacao
+  Destinatario --> "0..*" TipoCanal : preferencias
+  EstrategiaEnvio ..> ResultadoEnvio : cria
+  EstrategiaEnvio <|-- EnvioEmail : herança
+  EstrategiaEnvio <|-- EnvioSms : herança
+  EstrategiaEnvio <|-- EnvioPush : herança
+  EnvioEmail --> "1" GatewayEmail
+  EnvioSms --> "1" GatewaySms
+  EnvioPush --> "1" GatewayPush
+  GatewayEmail <|.. SendGridAdapter : realização
+  GatewaySms <|.. TwilioAdapter : realização
+  GatewayPush <|.. FirebaseAdapter : realização
+  SendGridAdapter --> "1" SendGridApi : adapta
+  TwilioAdapter --> "1" TwilioClient : adapta
+  FirebaseAdapter --> "1" FirebaseMessaging : adapta
+</pre>
+  </div>
+  <div class="legenda">Figura 1 — Diagrama de Classes completo do Sistema de Notificação (atributos tipados, métodos e relacionamentos).</div>
+</section>
+
+<section class="quebra">
+  <h3>Relacionamentos presentes no diagrama</h3>
+  <table>
+    <tr><th style="width:105pt">Relacionamento</th><th style="width:170pt">Onde aparece</th><th>Significado no design</th></tr>
+    <tr><td><b>Composição</b> (◆)</td><td>ServicoNotificacao ◆— HistoricoNotificacoes</td><td>O histórico é criado dentro do serviço e não existe sem ele; o ciclo de vida das partes é controlado pelo todo.</td></tr>
+    <tr><td><b>Agregação</b> (◇)</td><td>ServicoNotificacao ◇— EstrategiaEnvio; HistoricoNotificacoes ◇— Notificacao</td><td>O serviço guarda estratégias criadas fora dele (injetadas); elas podem existir e ser reaproveitadas independentemente.</td></tr>
+    <tr><td><b>Herança</b> (generalização)</td><td>EnvioEmail, EnvioSms, EnvioPush → EstrategiaEnvio</td><td>Cada canal é uma especialização da estratégia abstrata e sobrescreve validação e envio.</td></tr>
+    <tr><td><b>Realização</b> (interface)</td><td>SendGridAdapter → GatewayEmail; TwilioAdapter → GatewaySms; FirebaseAdapter → GatewayPush</td><td>Os adapters implementam a interface que o sistema espera.</td></tr>
+    <tr><td><b>Associação</b> (→)</td><td>Notificacao → Destinatario (0..* para 1); EnvioSms → GatewaySms; Adapters → APIs externas</td><td>Um objeto mantém referência estável a outro para colaborar com ele.</td></tr>
+    <tr><td><b>Dependência</b> (- - &gt;)</td><td>EstrategiaEnvio ⇢ ResultadoEnvio; ServicoNotificacao ⇢ Notificacao</td><td>Uso temporário: a estratégia cria um resultado; o serviço recebe notificações como parâmetro.</td></tr>
+  </table>
+  <p><b>Notação:</b> <code>-</code> privado, <code>+</code> público, <code>#</code> protegido; métodos em <i>itálico/com *</i> são
+  abstratos; <code>$</code> indica membro estático. Os estereótipos <code>&lt;&lt;interface&gt;&gt;</code>,
+  <code>&lt;&lt;abstract&gt;&gt;</code>, <code>&lt;&lt;enumeration&gt;&gt;</code> e <code>&lt;&lt;externa&gt;&gt;</code>
+  (bibliotecas de terceiros, que não podemos alterar) identificam a natureza de cada tipo.</p>
+</section>
+
+<!-- ============================ DIAGRAMA DE SEQUÊNCIA ============================ -->
+<section class="paisagem">
+  <h2>1.4 Diagrama de Sequência — envio por preferências com retentativa</h2>
+  <div class="diagrama">
+<pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor Cliente as Aplicação Cliente
+  participant S as :ServicoNotificacao
+  participant N as :Notificacao
+  participant E as :EnvioSms (EstrategiaEnvio)
+  participant A as :TwilioAdapter
+  participant T as :TwilioClient (externo)
+  participant H as :HistoricoNotificacoes
+
+  Cliente->>+S: enviarPorPreferencias(ana, titulo, mensagem)
+  loop para cada canal em ana.getPreferencias() - EMAIL, SMS, PUSH
+    S->>N: new Notificacao(ana, titulo, mensagem, canal)
+    S->>S: estrategia = estrategias.get(canal)
+    loop enquanto falha temporária e tentativas < maxTentativas
+      S->>N: incrementarTentativa()
+      S->>+E: enviar(notificacao)
+      E->>E: validarDestinatario(ana)
+      alt contato inválido
+        E-->>S: ResultadoEnvio.falhaDefinitiva(...)
+      else contato válido
+        E->>E: executarEnvio(n) — formata texto (máx. 160)
+        E->>+A: enviarSms(telefone, texto)
+        A->>+T: createMessage(from, to, body)
+        alt provedor indisponível
+          T--xA: IllegalStateException(503)
+          A-->>E: false
+          E-->>S: ResultadoEnvio.falha("SMS falhou")
+        else entregue
+          T-->>-A: "SM123..." (SID)
+          A-->>-E: true
+          E-->>-S: ResultadoEnvio.sucesso(...)
+        end
+      end
+    end
+    alt resultado.isSucesso()
+      S->>N: marcarComoEnviada()
+    else
+      S->>N: marcarComoFalha()
+    end
+    S->>H: registrar(notificacao)
+  end
+  S-->>-Cliente: List&lt;ResultadoEnvio&gt;
+</pre>
+  </div>
+  <div class="legenda">Figura 2 — Diagrama de Sequência: o serviço percorre os canais preferidos; para o canal SMS, a estratégia valida, formata e delega ao adapter, que traduz a API do Twilio. Uma falha temporária provoca nova tentativa.</div>
+</section>
+
+<section class="quebra">
+  <h3>Leitura do diagrama de sequência</h3>
+  <ol>
+    <li>A aplicação cliente pede ao <code>ServicoNotificacao</code> que avise a destinatária Ana por todos os seus canais preferidos.</li>
+    <li>Para cada canal, o serviço cria uma <code>Notificacao</code> e <b>busca a estratégia</b> registrada para aquele canal — sem <code>if/switch</code>.</li>
+    <li>A estratégia (aqui <code>EnvioSms</code>) <b>valida</b> o contato. Se o telefone for inválido, devolve uma falha <i>definitiva</i> e o laço de retentativa termina imediatamente (RF03/RF05).</li>
+    <li>Se o contato é válido, a estratégia <b>formata</b> a mensagem segundo as regras do canal (RF04) e chama a interface <code>GatewaySms</code>, implementada pelo <code>TwilioAdapter</code>.</li>
+    <li>O adapter traduz a chamada para a API externa (<code>createMessage</code>) e converte exceções e o SID retornado em um simples <code>boolean</code>.</li>
+    <li>Em caso de falha temporária (HTTP 503), o serviço tenta novamente até <code>maxTentativas</code>. Ao final, marca a notificação como ENVIADA ou FALHOU e a registra no histórico (RF06).</li>
+  </ol>
+
+  <!-- ============================ ETAPA 2 ============================ -->
+  <h2>2. Etapa 2 — Aplicação de Padrões de Projeto</h2>
+
+  <h3>2.1 Seleção dos padrões</h3>
+  <table>
+    <tr><th>Padrão</th><th>Categoria (GoF)</th><th>Onde é aplicado</th><th>Requisitos atendidos</th></tr>
+    <tr><td><b>Strategy</b></td><td>Comportamental</td><td><code>EstrategiaEnvio</code>, <code>EnvioEmail</code>, <code>EnvioSms</code>, <code>EnvioPush</code>; Context = <code>ServicoNotificacao</code></td><td>RF01, RF02, RF03, RF04, RF07</td></tr>
+    <tr><td><b>Adapter</b></td><td>Estrutural</td><td><code>GatewayEmail/Sms/Push</code> (Target), <code>SendGridAdapter</code>, <code>TwilioAdapter</code>, <code>FirebaseAdapter</code>; Adaptees = APIs externas</td><td>RF01, RF05, RF07</td></tr>
+  </table>
+
+  <h3>2.2 Strategy (comportamental)</h3>
+  <h4>Qual problema no design ele resolve?</h4>
+  <div class="problema">
+    <p>O comportamento de “enviar uma notificação” <b>muda completamente conforme o canal</b>: a validação do
+    contato, a formatação do conteúdo e a forma de entrega são diferentes para e-mail, SMS e push. A solução
+    ingênua seria um único método com um grande <code>switch</code>:</p>
+<pre><code class="language-java">// SEM o padrão: tudo concentrado em um método
+public void enviar(Notificacao n) {
+    switch (n.getCanal()) {
+        case EMAIL -> { /* valida e-mail, monta HTML, chama SendGrid ... */ }
+        case SMS   -> { /* valida telefone, corta em 160, chama Twilio ... */ }
+        case PUSH  -> { /* valida token, corta título, chama Firebase ... */ }
+    }
+}</code></pre>
+    <p>Esse desenho traz problemas concretos para o nosso sistema:</p>
+    <ul>
+      <li><b>Viola o Princípio Aberto/Fechado:</b> adicionar WhatsApp ou Telegram exige abrir e alterar a classe central (RF07).</li>
+      <li><b>Baixa coesão:</b> a classe do serviço passa a conhecer regras de três canais diferentes e cresce sem controle.</li>
+      <li><b>Difícil de testar:</b> não é possível testar a regra de SMS isoladamente nem substituir um canal por um simulado.</li>
+      <li><b>Lógica duplicada:</b> o fluxo de retentativa e histórico se mistura com as regras de cada canal.</li>
+      <li><b>Sem troca em tempo de execução:</b> não é possível, por exemplo, trocar o provedor de SMS de um país para outro sem recompilar.</li>
+    </ul>
+  </div>
+  <h4>Qual a solução proposta pelo padrão?</h4>
+  <div class="solucao">
+    <p>O Strategy propõe <b>encapsular cada variação do algoritmo em uma classe própria</b>, todas obedecendo a uma
+    mesma abstração, e fazer o <b>Context</b> depender só dessa abstração. No nosso design:</p>
+    <ul>
+      <li><b>Strategy:</b> <code>EstrategiaEnvio</code> (classe abstrata) define <code>getCanal()</code>, <code>validarDestinatario()</code>, <code>executarEnvio()</code> e o fluxo comum <code>enviar()</code>.</li>
+      <li><b>ConcreteStrategies:</b> <code>EnvioEmail</code>, <code>EnvioSms</code> e <code>EnvioPush</code> — cada uma contém <i>apenas</i> as regras do seu canal.</li>
+      <li><b>Context:</b> <code>ServicoNotificacao</code> mantém um <code>Map&lt;TipoCanal, EstrategiaEnvio&gt;</code> e delega o envio por polimorfismo. Ele cuida apenas do que é comum a todos os canais: retentativa e histórico.</li>
+    </ul>
+    <p><b>Resultado:</b> um novo canal é uma nova subclasse registrada com <code>registrarEstrategia()</code>; o serviço não muda.
+    Cada estratégia é testável isoladamente e pode ser substituída em tempo de execução.</p>
+  </div>
+  <div class="diagrama">
+<pre class="mermaid">
+classDiagram
+  direction LR
+  class ServicoNotificacao {
+    &lt;&lt;Context&gt;&gt;
+    -estrategias: Map~TipoCanal, EstrategiaEnvio~
+    +registrarEstrategia(e: EstrategiaEnvio) void
+    +enviar(n: Notificacao) ResultadoEnvio
+  }
+  class EstrategiaEnvio {
+    &lt;&lt;Strategy&gt;&gt;
+    +getCanal()* TipoCanal
+    +enviar(n: Notificacao) ResultadoEnvio
+  }
+  class EnvioEmail { &lt;&lt;ConcreteStrategy&gt;&gt; }
+  class EnvioSms { &lt;&lt;ConcreteStrategy&gt;&gt; }
+  class EnvioPush { &lt;&lt;ConcreteStrategy&gt;&gt; }
+  ServicoNotificacao o-- EstrategiaEnvio
+  EstrategiaEnvio <|-- EnvioEmail
+  EstrategiaEnvio <|-- EnvioSms
+  EstrategiaEnvio <|-- EnvioPush
+</pre>
+  </div>
+  <div class="legenda">Figura 3 — Mini-diagrama do padrão Strategy no sistema.</div>
+
+  <h3>2.3 Adapter (estrutural)</h3>
+  <h4>Qual problema no design ele resolve?</h4>
+  <div class="problema">
+    <p>A entrega real depende de <b>bibliotecas de terceiros com interfaces incompatíveis entre si e com o nosso
+    modelo</b>, e que não podemos alterar:</p>
+    <table>
+      <tr><th>Provedor</th><th>Como a API funciona</th><th>Como sinaliza erro</th></tr>
+      <tr><td>SendGrid (e-mail)</td><td><code>send(Map payload)</code></td><td>Retorna código HTTP (<code>int</code>)</td></tr>
+      <tr><td>Twilio (SMS)</td><td><code>createMessage(from, to, body)</code></td><td>Lança exceção; sucesso retorna um SID</td></tr>
+      <tr><td>Firebase (push)</td><td><code>dispatch(new Message(...))</code></td><td>Retorna <code>null</code></td></tr>
+    </table>
+    <p>Se as estratégias chamassem essas APIs diretamente, o código de domínio ficaria <b>acoplado a detalhes de
+    fornecedores</b> (formatos de payload, códigos HTTP, exceções específicas). Trocar o Twilio por outro provedor
+    obrigaria a reescrever a <code>EnvioSms</code>, e testar o sistema exigiria acesso aos serviços reais.</p>
+  </div>
+  <h4>Qual a solução proposta pelo padrão?</h4>
+  <div class="solucao">
+    <p>O Adapter propõe criar uma <b>classe intermediária que implementa a interface esperada pelo cliente
+    (Target) e traduz as chamadas para a interface existente (Adaptee)</b>. No nosso design:</p>
+    <ul>
+      <li><b>Target:</b> <code>GatewayEmail</code>, <code>GatewaySms</code>, <code>GatewayPush</code> — interfaces simples, no vocabulário do nosso domínio, que retornam <code>boolean</code>.</li>
+      <li><b>Adaptee:</b> <code>SendGridApi</code>, <code>TwilioClient</code>, <code>FirebaseMessaging</code> — as bibliotecas externas.</li>
+      <li><b>Adapter:</b> <code>SendGridAdapter</code>, <code>TwilioAdapter</code>, <code>FirebaseAdapter</code> — montam o formato do fornecedor e <b>padronizam o tratamento de erro</b> (código HTTP, exceção ou <code>null</code> viram <code>false</code>).</li>
+      <li><b>Client:</b> as estratégias de envio, que dependem apenas do Target.</li>
+    </ul>
+    <p><b>Resultado:</b> trocar de provedor significa escrever um novo adapter, sem tocar em estratégias ou no serviço;
+    nos testes, basta injetar um gateway simulado.</p>
+  </div>
+  <div class="diagrama">
+<pre class="mermaid">
+classDiagram
+  direction LR
+  class EnvioSms { &lt;&lt;Client&gt;&gt; }
+  class GatewaySms {
+    &lt;&lt;interface · Target&gt;&gt;
+    +enviarSms(telefone: String, texto: String) boolean
+  }
+  class TwilioAdapter {
+    &lt;&lt;Adapter&gt;&gt;
+    -client: TwilioClient
+    +enviarSms(telefone: String, texto: String) boolean
+  }
+  class TwilioClient {
+    &lt;&lt;Adaptee · externa&gt;&gt;
+    +createMessage(from: String, to: String, body: String) String
+  }
+  EnvioSms --> GatewaySms
+  GatewaySms <|.. TwilioAdapter
+  TwilioAdapter --> TwilioClient : traduz chamadas
+</pre>
+  </div>
+  <div class="legenda">Figura 4 — Mini-diagrama do padrão Adapter (exemplo do canal SMS; e-mail e push seguem a mesma estrutura).</div>
+
+  <h3>2.4 Como os dois padrões trabalham juntos</h3>
+  <p>Os padrões atacam <b>dois eixos de variação diferentes</b>, e por isso se complementam:</p>
+  <ul>
+    <li><b>Strategy</b> varia <i>o quê</i> e <i>como</i> se envia em cada <b>canal</b> (regras de negócio: validação, formatação).</li>
+    <li><b>Adapter</b> varia <i>quem</i> entrega a mensagem — o <b>provedor</b> (detalhe técnico de integração).</li>
+  </ul>
+  <p>Assim, é possível adicionar o canal “WhatsApp” (nova estratégia) ou trocar o Twilio por outro provedor de SMS
+  (novo adapter) de forma independente, cada mudança ficando confinada a uma única classe nova.</p>
+
+  <!-- ============================ ETAPA 3 ============================ -->
+  <h2>3. Etapa 3 — Prova de Conceito</h2>
+  <h3>3.1 Visão geral da implementação</h3>
+  <p>O padrão escolhido para a implementação é o <b>Strategy</b>. A prova de conceito foi escrita em <b>Java 17+</b>,
+  como aplicação de console, sem dependências externas. Os provedores são simulados, mas a estrutura dos adapters
+  também foi implementada para que a demonstração fique completa e coerente com o diagrama de classes.</p>
+<pre><code class="language-plaintext">src/notificacao/
+├── Main.java                  → demonstração (Client)
+├── modelo/                    → Notificacao, Destinatario, ResultadoEnvio, TipoCanal, StatusNotificacao
+├── estrategia/                → STRATEGY: EstrategiaEnvio, EnvioEmail, EnvioSms, EnvioPush
+├── servico/                   → CONTEXT: ServicoNotificacao, HistoricoNotificacoes
+├── adapter/                   → Gateway* (Target) e *Adapter
+└── externo/                   → APIs de terceiros simuladas (Adaptee)</code></pre>
+
+  <h3>3.2 Snippets explicados</h3>
+
+  <h4>Snippet 1 — A abstração Strategy</h4>
+  <span class="arquivo">estrategia/EstrategiaEnvio.java</span>
+<pre><code class="language-java">public abstract class EstrategiaEnvio {
+
+    /** Canal que esta estratégia atende. */
+    public abstract TipoCanal getCanal();
+
+    /** Verifica se o destinatário possui o contato necessário para este canal. */
+    protected abstract boolean validarDestinatario(Destinatario destinatario);
+
+    /** Formata e entrega a mensagem de fato (cada canal faz de um jeito). */
+    protected abstract ResultadoEnvio executarEnvio(Notificacao notificacao);
+
+    /** Fluxo comum a todas as estratégias: valida e depois envia. */
+    public final ResultadoEnvio enviar(Notificacao notificacao) {
+        if (!validarDestinatario(notificacao.getDestinatario())) {
+            return ResultadoEnvio.falhaDefinitiva(getCanal() + ": destinatário sem contato válido para este canal");
+        }
+        return executarEnvio(notificacao);
+    }
+}</code></pre>
+  <div class="explica"><b>Como o padrão aparece:</b> esta classe é o papel <b>Strategy</b>. Ela define o contrato que
+  o Context usa (<code>enviar</code> e <code>getCanal</code>) e deixa abstratas as partes que variam por canal.
+  O método <code>enviar</code> é <code>final</code> para garantir que <b>toda</b> estratégia valide antes de enviar (RF03);
+  a falha de validação é marcada como <i>definitiva</i>, o que impede retentativas inúteis (RF05).</div>
+
+  <h4>Snippet 2 — Estratégias concretas (cada canal com suas regras)</h4>
+  <span class="arquivo">estrategia/EnvioSms.java</span>
+<pre><code class="language-java">public class EnvioSms extends EstrategiaEnvio {
+    public static final int LIMITE_CARACTERES = 160;
+    private final GatewaySms gateway;
+
+    public EnvioSms(GatewaySms gateway) { this.gateway = gateway; }
+
+    @Override public TipoCanal getCanal() { return TipoCanal.SMS; }
+
+    @Override
+    protected boolean validarDestinatario(Destinatario d) {
+        return d.getTelefone() != null &amp;&amp; d.getTelefone().matches("^\\+\\d{12,13}$");
+    }
+
+    @Override
+    protected ResultadoEnvio executarEnvio(Notificacao n) {
+        String texto = n.getTitulo() + ": " + n.getMensagem();
+        if (texto.length() &gt; LIMITE_CARACTERES) {
+            texto = texto.substring(0, LIMITE_CARACTERES - 3) + "...";
+        }
+        boolean ok = gateway.enviarSms(n.getDestinatario().getTelefone(), texto);
+        return ok ? ResultadoEnvio.sucesso("SMS entregue para " + n.getDestinatario().getTelefone())
+                  : ResultadoEnvio.falha("SMS falhou no provedor");
+    }
+}</code></pre>
+  <span class="arquivo">estrategia/EnvioEmail.java (trecho)</span>
+<pre><code class="language-java">@Override
+protected boolean validarDestinatario(Destinatario d) {
+    return d.getEmail() != null &amp;&amp; d.getEmail().matches("^[\\w.+-]+@[\\w-]+\\.[\\w.]+$");
+}
+
+@Override
+protected ResultadoEnvio executarEnvio(Notificacao n) {
+    String html = "&lt;h1&gt;" + n.getTitulo() + "&lt;/h1&gt;&lt;p&gt;Olá, " + n.getDestinatario().getNome()
+            + "!&lt;/p&gt;&lt;p&gt;" + n.getMensagem() + "&lt;/p&gt;";
+    boolean ok = gateway.enviarEmail(remetente, n.getDestinatario().getEmail(), n.getTitulo(), html);
+    return ok ? ResultadoEnvio.sucesso("EMAIL entregue para " + n.getDestinatario().getEmail())
+              : ResultadoEnvio.falha("EMAIL recusado pelo provedor");
+}</code></pre>
+  <div class="explica"><b>Como o padrão aparece:</b> estas são as <b>ConcreteStrategies</b>. Compare as duas classes:
+  a <code>EnvioSms</code> valida telefone e corta o texto em 160 caracteres; a <code>EnvioEmail</code> valida o formato do
+  e-mail e monta HTML (RF04). Toda a regra específica de um canal fica <b>dentro de uma única classe</b> — é exatamente
+  o que substitui cada <code>case</code> do <code>switch</code> mostrado na Etapa 2. A <code>EnvioPush</code> segue a mesma ideia
+  (exige <i>token</i> e limita o título a 50 caracteres).</div>
+
+  <h4>Snippet 3 — O Context delega sem conhecer o canal</h4>
+  <span class="arquivo">servico/ServicoNotificacao.java</span>
+<pre><code class="language-java">public class ServicoNotificacao {
+    private final Map&lt;TipoCanal, EstrategiaEnvio&gt; estrategias = new EnumMap&lt;&gt;(TipoCanal.class);
+    private final HistoricoNotificacoes historico = new HistoricoNotificacoes(); // composição
+    private final int maxTentativas;
+
+    /** Novos canais entram aqui, sem alterar o restante da classe (Aberto/Fechado). */
+    public void registrarEstrategia(EstrategiaEnvio estrategia) {
+        estrategias.put(estrategia.getCanal(), estrategia);
+    }
+
+    public ResultadoEnvio enviar(Notificacao notificacao) {
+        EstrategiaEnvio estrategia = estrategias.get(notificacao.getCanal());
+        ResultadoEnvio resultado;
+        if (estrategia == null) {
+            resultado = ResultadoEnvio.falhaDefinitiva("Nenhuma estratégia registrada para " + notificacao.getCanal());
+            notificacao.marcarComoFalha();
+        } else {
+            resultado = enviarComRetentativa(estrategia, notificacao);
+        }
+        historico.registrar(notificacao);
+        return resultado;
+    }
+
+    private ResultadoEnvio enviarComRetentativa(EstrategiaEnvio estrategia, Notificacao n) {
+        ResultadoEnvio resultado;
+        do {
+            n.incrementarTentativa();
+            resultado = estrategia.enviar(n);       // polimorfismo: e-mail, SMS ou push
+            if (resultado.isSucesso()) {
+                n.marcarComoEnviada();
+                return resultado;
+            }
+        } while (!resultado.isDefinitivo() &amp;&amp; n.getTentativas() &lt; maxTentativas);
+        n.marcarComoFalha();
+        return resultado;
+    }
+}</code></pre>
+  <div class="explica"><b>Como o padrão aparece:</b> esta classe é o <b>Context</b>. Observe que <b>não existe nenhum
+  <code>if</code> ou <code>switch</code> sobre o tipo de canal</b>: o serviço apenas busca a estratégia no mapa e chama
+  <code>estrategia.enviar(n)</code>. O que é comum a todos os canais — retentativa (RF05) e histórico (RF06) — fica aqui,
+  uma única vez. O método <code>registrarEstrategia</code> é o ponto de extensão: adicionar um canal ou trocar o provedor
+  de um canal existente é só registrar outra estratégia (RF07).</div>
+
+  <h4>Snippet 4 — Client: montagem e troca de estratégia em tempo de execução</h4>
+  <span class="arquivo">Main.java (trecho)</span>
+<pre><code class="language-java">ServicoNotificacao servico = new ServicoNotificacao(3);
+servico.registrarEstrategia(new EnvioEmail(
+        new SendGridAdapter(new SendGridApi("SG.chave-demo")), "noreply@loja.com"));
+servico.registrarEstrategia(new EnvioSms(
+        new TwilioAdapter(new TwilioClient(1), "+5511900000000")));   // falha 1x de propósito
+servico.registrarEstrategia(new EnvioPush(
+        new FirebaseAdapter(new FirebaseMessaging())));
+
+// Cenário 1: o mesmo código cliente, comportamento diferente por estratégia
+servico.enviarPorPreferencias(ana, "Pedido #1042 confirmado", "Seu pedido foi aprovado ...");
+
+// Cenário 4: troca da estratégia de SMS em tempo de execução
+servico.registrarEstrategia(new EnvioSms(
+        new TwilioAdapter(new TwilioClient(0), "+5521911111111")));
+servico.enviar(new Notificacao(ana, "Código 482913", "Use este código para entrar.", TipoCanal.SMS));</code></pre>
+  <div class="explica"><b>Como o padrão aparece:</b> o cliente escolhe e injeta as estratégias concretas; o serviço não
+  sabe quais classes estão por trás de cada canal. No cenário 4, a estratégia de SMS é <b>substituída em tempo de
+  execução</b> por outra instância (outro número/provedor) sem que nenhuma linha do <code>ServicoNotificacao</code> mude —
+  a principal vantagem prática do Strategy.</div>
+
+  <h4>Snippet 5 — Apoio: um Adapter usado pela estratégia</h4>
+  <span class="arquivo">adapter/TwilioAdapter.java</span>
+<pre><code class="language-java">public class TwilioAdapter implements GatewaySms {
+    private final TwilioClient client;
+    private final String numeroOrigem;
+
+    @Override
+    public boolean enviarSms(String telefone, String texto) {
+        try {
+            return client.createMessage(numeroOrigem, telefone, texto) != null;
+        } catch (IllegalStateException e) {
+            System.out.println("      [TwilioAdapter] erro do provedor: " + e.getMessage());
+            return false;
+        }
+    }
+}</code></pre>
+  <div class="explica">Embora o padrão escolhido para a prova de conceito seja o Strategy, este trecho mostra como as
+  estratégias ficam isoladas dos provedores: a <code>EnvioSms</code> conhece apenas <code>GatewaySms</code>; o adapter
+  converte a exceção e o SID do Twilio em um <code>boolean</code>, padronizando o tratamento de erro.</div>
+
+  <h3>3.3 Execução e saída do console</h3>
+  <p>Comandos para compilar e executar (na raiz do repositório):</p>
+<pre><code class="language-bash">javac -encoding UTF-8 -d out $(find src -name "*.java")
+java -cp out notificacao.Main</code></pre>
+  <p>Saída obtida:</p>
+<div class="saida">=== Sistema de Notificação - Prova de Conceito (Strategy) ===
+
+&gt;&gt; Cenário 1: Ana recebe pelos 3 canais preferidos (SMS falha 1x e é reenviado)
+      [SendGrid] POST /v3/mail/send key=SG.*** to=ana@email.com
+      [TwilioAdapter] erro do provedor: Twilio 503 Service Unavailable
+      [Twilio] SMS +5511900000000 -&gt; +5511987654321 (160 caracteres)
+      [Firebase] push "Pedido #1042 confirmado" -&gt; token-ana-123
+   OK   EMAIL entregue para ana@email.com
+   OK   SMS entregue para +5511987654321
+   OK   PUSH entregue ao dispositivo de Ana
+
+&gt;&gt; Cenário 2: Bruno - e-mail inválido (falha de validação, sem retentativa)
+   ERRO EMAIL: destinatário sem contato válido para este canal
+
+&gt;&gt; Cenário 3: Bruno - token de push expirado (provedor rejeita 3x)
+      [Firebase] token rejeitado: expired-token-999
+      [Firebase] token rejeitado: expired-token-999
+      [Firebase] token rejeitado: expired-token-999
+   ERRO PUSH rejeitado pelo provedor (token inválido ou expirado)
+
+&gt;&gt; Cenário 4: Troca de estratégia em tempo de execução (canal SMS passa a usar outro provedor)
+      [Twilio] SMS +5521911111111 -&gt; +5511987654321 (43 caracteres)
+   OK   SMS entregue para +5511987654321
+
+=== Histórico ===
+   [401e4d1d] EMAIL -&gt; Ana    | ENVIADA | tentativas=1 | "Pedido #1042 confirmado"
+   [480bfe37] SMS   -&gt; Ana    | ENVIADA | tentativas=2 | "Pedido #1042 confirmado"
+   [a9f94a98] PUSH  -&gt; Ana    | ENVIADA | tentativas=1 | "Pedido #1042 confirmado"
+   [adee29f7] EMAIL -&gt; Bruno  | FALHOU  | tentativas=1 | "Promoção"
+   [08d2da4d] PUSH  -&gt; Bruno  | FALHOU  | tentativas=3 | "Promoção"
+   [36e1937f] SMS   -&gt; Ana    | ENVIADA | tentativas=1 | "Código 482913"
+
+Enviadas: 4 | Falhas: 2</div>
+  <table>
+    <tr><th style="width:70pt">Cenário</th><th>O que comprova</th></tr>
+    <tr><td>1</td><td>A mesma chamada gera três comportamentos diferentes (HTML, SMS cortado em 160 caracteres, push). O SMS falhou uma vez e foi reenviado (tentativas=2).</td></tr>
+    <tr><td>2</td><td>A validação da estratégia de e-mail rejeita o contato inválido e não há retentativa (tentativas=1).</td></tr>
+    <tr><td>3</td><td>Falha temporária do provedor gera exatamente 3 tentativas (<code>maxTentativas</code>) antes de marcar FALHOU.</td></tr>
+    <tr><td>4</td><td>Estratégia trocada em tempo de execução sem alterar o serviço (novo número de origem).</td></tr>
+  </table>
+
+  <!-- ============================ REPOSITÓRIO ============================ -->
+  <h2>4. Repositório do código-fonte</h2>
+  <div class="repo"><b>GitHub:</b> <a href="https://github.com/SEU-USUARIO/sistema-notificacao">https://github.com/SEU-USUARIO/sistema-notificacao</a></div>
+  <p>O repositório contém o código-fonte completo em <code>src/</code>, o arquivo <code>README.md</code> com as instruções
+  de execução e esta documentação em <code>docs/</code>.</p>
+
+  <!-- ============================ CHECKLIST ============================ -->
+  <h2>5. Checklist de entrega</h2>
+  <table class="check">
+    <tr><td>✔</td><td>Etapa 1 — Definição do problema e requisitos funcionais documentados (seções 1.1 e 1.2)</td></tr>
+    <tr><td>✔</td><td>Etapa 1 — Diagrama de Classes detalhado com atributos tipados, métodos e relacionamentos (seção 1.3)</td></tr>
+    <tr><td>✔</td><td>Etapa 1 — Diagrama comportamental modelado: Diagrama de Sequência (seção 1.4)</td></tr>
+    <tr><td>✔</td><td>Etapa 2 — 2 padrões de categorias diferentes: Strategy (comportamental) e Adapter (estrutural) (seção 2.1)</td></tr>
+    <tr><td>✔</td><td>Etapa 2 — Para cada padrão: problema resolvido e solução proposta, com mini-diagramas (seções 2.2 e 2.3)</td></tr>
+    <tr><td>✔</td><td>Etapa 3 — Padrão Strategy implementado em Java (seção 3.1)</td></tr>
+    <tr><td>✔</td><td>Etapa 3 — Snippets relevantes incluídos com explicações (seção 3.2)</td></tr>
+    <tr><td>✔</td><td>Link do repositório inserido no PDF (capa e seção 4)</td></tr>
+  </table>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<script>
+  hljs.highlightAll();
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'neutral',
+    securityLevel: 'loose',
+    themeVariables: { fontFamily: 'Segoe UI, Arial, sans-serif', fontSize: '13px' },
+    classDiagram: { useMaxWidth: true },
+    sequence: { useMaxWidth: true, mirrorActors: false, wrap: true }
+  });
+  mermaid.run({ querySelector: '.mermaid' }).then(() => { document.body.setAttribute('data-pronto', '1'); });
+</script>
+</body>
+</html>
