@@ -1,0 +1,171 @@
+@startuml diagrama-classes
+!pragma layout smetana
+' Layout vertical
+top to bottom direction
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+' ===== Servico e historico =====
+class ServicoNotificacao {
+    -estrategias : Map<TipoCanal, EstrategiaEnvio>
+    -historico : HistoricoNotificacoes
+    -maxTentativas : int
+    +ServicoNotificacao(maxTentativas : int)
+    +registrarEstrategia(estrategia : EstrategiaEnvio) : void
+    +enviar(notificacao : Notificacao) : ResultadoEnvio
+    +enviarPorPreferencias(d : Destinatario, titulo : String, mensagem : String) : List<ResultadoEnvio>
+    -enviarComRetentativa(e : EstrategiaEnvio, n : Notificacao) : ResultadoEnvio
+    +getHistorico() : HistoricoNotificacoes
+}
+
+class HistoricoNotificacoes {
+    -registros : List<Notificacao>
+    +registrar(n : Notificacao) : void
+    +listarTodas() : List<Notificacao>
+    +filtrarPorStatus(s : StatusNotificacao) : List<Notificacao>
+}
+
+' ===== Modelo =====
+class Notificacao {
+    -id : String
+    -destinatario : Destinatario
+    -titulo : String
+    -mensagem : String
+    -canal : TipoCanal
+    -criadaEm : LocalDateTime
+    -status : StatusNotificacao
+    -tentativas : int
+    +incrementarTentativa() : void
+    +marcarComoEnviada() : void
+    +marcarComoFalha() : void
+    +getStatus() : StatusNotificacao
+}
+
+class Destinatario {
+    -id : String
+    -nome : String
+    -email : String
+    -telefone : String
+    -deviceToken : String
+    -preferencias : List<TipoCanal>
+    +adicionarPreferencia(canal : TipoCanal) : void
+    +getPreferencias() : List<TipoCanal>
+}
+
+class ResultadoEnvio {
+    -sucesso : boolean
+    -definitivo : boolean
+    -detalhe : String
+    -dataHora : LocalDateTime
+    +{static} sucesso(detalhe : String) : ResultadoEnvio
+    +{static} falha(detalhe : String) : ResultadoEnvio
+    +{static} falhaDefinitiva(detalhe : String) : ResultadoEnvio
+    +isSucesso() : boolean
+    +isDefinitivo() : boolean
+}
+
+enum TipoCanal {
+    EMAIL
+    SMS
+    PUSH
+}
+
+enum StatusNotificacao {
+    PENDENTE
+    ENVIADA
+    FALHOU
+}
+
+' ===== Strategy =====
+abstract class EstrategiaEnvio {
+    +{abstract} getCanal() : TipoCanal
+    #{abstract} validarDestinatario(d : Destinatario) : boolean
+    #{abstract} executarEnvio(n : Notificacao) : ResultadoEnvio
+    +enviar(n : Notificacao) : ResultadoEnvio
+}
+
+class EnvioEmail {
+    -gateway : GatewayEmail
+    -remetente : String
+    #validarDestinatario(d : Destinatario) : boolean
+    #executarEnvio(n : Notificacao) : ResultadoEnvio
+}
+
+class EnvioSms {
+    +{static} LIMITE_CARACTERES : int = 160
+    -gateway : GatewaySms
+    #validarDestinatario(d : Destinatario) : boolean
+    #executarEnvio(n : Notificacao) : ResultadoEnvio
+}
+
+class EnvioPush {
+    +{static} LIMITE_TITULO : int = 50
+    -gateway : GatewayPush
+    #validarDestinatario(d : Destinatario) : boolean
+    #executarEnvio(n : Notificacao) : ResultadoEnvio
+}
+
+' ===== Adapter =====
+interface GatewayEmail {
+    +enviarEmail(remetente : String, para : String, assunto : String, html : String) : boolean
+}
+interface GatewaySms {
+    +enviarSms(telefone : String, texto : String) : boolean
+}
+interface GatewayPush {
+    +enviarPush(token : String, titulo : String, corpo : String) : boolean
+}
+
+class SendGridAdapter {
+    -api : SendGridApi
+    +enviarEmail(...) : boolean
+}
+class TwilioAdapter {
+    -client : TwilioClient
+    -numeroOrigem : String
+    +enviarSms(...) : boolean
+}
+class FirebaseAdapter {
+    -firebase : FirebaseMessaging
+    +enviarPush(...) : boolean
+}
+
+class SendGridApi <<externa>> {
+    -apiKey : String
+    +send(payload : Map<String, String>) : int
+}
+class TwilioClient <<externa>> {
+    +createMessage(from : String, to : String, body : String) : String
+}
+class FirebaseMessaging <<externa>> {
+    +dispatch(message : Message) : String
+}
+
+' ===== Relacionamentos =====
+ServicoNotificacao "1" *-- "1" HistoricoNotificacoes : composição
+ServicoNotificacao "1" o-- "0..*" EstrategiaEnvio : agregação
+ServicoNotificacao ..> Notificacao : <<usa>>
+HistoricoNotificacoes "1" o-- "0..*" Notificacao : registros
+Notificacao "0..*" --> "1" Destinatario : destinatario
+Notificacao --> TipoCanal
+Notificacao --> StatusNotificacao
+Destinatario --> "0..*" TipoCanal : preferencias
+EstrategiaEnvio ..> ResultadoEnvio : <<cria>>
+
+EstrategiaEnvio <|-- EnvioEmail
+EstrategiaEnvio <|-- EnvioSms
+EstrategiaEnvio <|-- EnvioPush
+
+EnvioEmail --> "1" GatewayEmail
+EnvioSms --> "1" GatewaySms
+EnvioPush --> "1" GatewayPush
+
+GatewayEmail <|.. SendGridAdapter
+GatewaySms <|.. TwilioAdapter
+GatewayPush <|.. FirebaseAdapter
+
+SendGridAdapter --> "1" SendGridApi : adapta
+TwilioAdapter --> "1" TwilioClient : adapta
+FirebaseAdapter --> "1" FirebaseMessaging : adapta
+@enduml

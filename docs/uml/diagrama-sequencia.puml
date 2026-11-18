@@ -1,0 +1,62 @@
+@startuml diagrama-sequencia
+skinparam shadowing false
+skinparam defaultFontName Arial
+autonumber
+hide footbox
+
+' Definição dos participantes
+actor "Aplicação Cliente" as Cliente
+participant ":ServicoNotificacao" as Servico
+participant ":Notificacao" as Notificacao
+participant ":EnvioSms" as Estrategia
+participant ":TwilioAdapter" as Adapter
+participant ":TwilioClient" as Twilio
+participant ":HistoricoNotificacoes" as Historico
+
+Cliente -> Servico : enviarPorPreferencias(ana, titulo, mensagem)
+activate Servico
+
+loop para cada canal preferido da Ana (EMAIL, SMS, PUSH)
+    Servico -> Notificacao ** : new Notificacao(ana, titulo, mensagem, canal)
+    Servico -> Servico : estrategias.get(canal)
+
+    loop enquanto falhar e tentativas < maxTentativas
+        Servico -> Notificacao : incrementarTentativa()
+        Servico -> Estrategia : enviar(notificacao)
+        activate Estrategia
+        Estrategia -> Estrategia : validarDestinatario(ana)
+
+        alt contato inválido
+            Estrategia --> Servico : ResultadoEnvio.falhaDefinitiva()
+        else contato válido
+            Estrategia -> Estrategia : executarEnvio(notificacao)\n(corta o texto em 160 caracteres)
+            Estrategia -> Adapter : enviarSms(telefone, texto)
+            activate Adapter
+            Adapter -> Twilio : createMessage(from, to, body)
+            activate Twilio
+            alt serviço fora do ar
+                Twilio --> Adapter : IllegalStateException (503)
+                Adapter --> Estrategia : false
+                Estrategia --> Servico : ResultadoEnvio.falha()
+            else enviado
+                Twilio --> Adapter : SID da mensagem
+                Adapter --> Estrategia : true
+                Estrategia --> Servico : ResultadoEnvio.sucesso()
+            end
+            deactivate Twilio
+            deactivate Adapter
+        end
+        deactivate Estrategia
+    end
+
+    alt resultado com sucesso
+        Servico -> Notificacao : marcarComoEnviada()
+    else
+        Servico -> Notificacao : marcarComoFalha()
+    end
+    Servico -> Historico : registrar(notificacao)
+end
+
+Servico --> Cliente : List<ResultadoEnvio>
+deactivate Servico
+@enduml

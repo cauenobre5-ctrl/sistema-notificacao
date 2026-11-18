@@ -1,0 +1,25 @@
+@startuml padrao-strategy
+!pragma layout smetana
+left to right direction
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+class ServicoNotificacao <<Context>> {
+    -estrategias : Map<TipoCanal, EstrategiaEnvio>
+    +registrarEstrategia(e : EstrategiaEnvio) : void
+    +enviar(n : Notificacao) : ResultadoEnvio
+}
+abstract class EstrategiaEnvio <<Strategy>> {
+    +{abstract} getCanal() : TipoCanal
+    +enviar(n : Notificacao) : ResultadoEnvio
+}
+class EnvioEmail <<ConcreteStrategy>>
+class EnvioSms <<ConcreteStrategy>>
+class EnvioPush <<ConcreteStrategy>>
+
+ServicoNotificacao o-- EstrategiaEnvio
+EstrategiaEnvio <|-- EnvioEmail
+EstrategiaEnvio <|-- EnvioSms
+EstrategiaEnvio <|-- EnvioPush
+@enduml

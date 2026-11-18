@@ -1,0 +1,23 @@
+@startuml padrao-adapter
+!pragma layout smetana
+left to right direction
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+class EnvioSms <<Client>>
+interface GatewaySms <<Target>> {
+    +enviarSms(telefone : String, texto : String) : boolean
+}
+class TwilioAdapter <<Adapter>> {
+    -client : TwilioClient
+    +enviarSms(telefone : String, texto : String) : boolean
+}
+class TwilioClient <<Adaptee>> {
+    +createMessage(from : String, to : String, body : String) : String
+}
+
+EnvioSms --> GatewaySms
+GatewaySms <|.. TwilioAdapter
+TwilioAdapter --> TwilioClient : traduz a chamada
+@enduml

@@ -16,7 +16,10 @@ src/notificacao/
 ├── externo/                  # APIs de terceiros simuladas (Adaptees)
 └── servico/                  # ServicoNotificacao (Context) + HistoricoNotificacoes
 docs/                         # documentação (HTML -> PDF)
+└── uml/                      # diagramas em PlantUML (.puml) e imagens geradas (.svg)
 ```
+
+Para gerar as imagens dos diagramas: `java -jar plantuml.jar -charset UTF-8 -tsvg docs/uml/*.puml`
 
 ## Como executar
 
